@@ -1,0 +1,133 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HorizontalCard from "../components/HorizontalCard.astro";
+import { getCollection } from "astro:content";
+import createSlug from "../lib/createSlug"
+
+import TimeLineElement from "../components/cv/TimeLine.astro";
+
+const posts = (await getCollection("blog")).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const last_posts = posts.slice(0, 3);
+---
+
+<BaseLayout sideBarActiveItemID="home">
+  <div class="pb-0 mt-5">
+    <div class="text-xl py-1 font-semibold">Hi there | 안녕하세요 👋 </div>
+    <div class="text-5xl font-bold">I'm Sekwang Lee</div>
+    <div class="text-3xl py-3 font-bold">AI Researcher & Generalist</div>
+    <div class="py-2">
+      <text class="text-lg">
+        <div class="py-2 text-lg leading-7 space-y-5">
+          <p>
+            I am <b>an undergraduate student at POSTECH</b>, department of Computer Science and Engineering (<b>CSE</b>).
+          </p>
+          <p>
+            I am currently deeply interested <b>in 3D computer vision, computer graphics, and multimodal learning</b>
+            and continuously gaining research experience in this field.
+            I am not limited to this specific area and have a broad interest in various fields of computer science
+            and engineering, including AI.
+          </p>
+
+          <p>
+            <b>I don't want to give up any value easily.</b>
+            I believe that exploring diverse values, including not only professional knowledge in the field of CSE
+            but also deep reflection on humanities, leadership, and social issues, can exponentially enhance the
+            potential of an engineer.
+            I aspire to grow into an <b>engineering-based generalist</b>, capable of achieving goals in any environment.
+          </p>
+
+          <div>
+            <p class="mb-2">This is my personal motto:</p>
+            <blockquote class="italic border-l-4 pl-4">
+              <b>
+                "Everything can be taken from a man but one thing: the last of the human freedoms—to choose one’s
+                attitude in any given set of circumstances, to choose one’s own way."
+              </b>
+              <div class="mt-2 not-italic">- Viktor E. Frankl, <i>Man's Search for Meaning</i></div>
+            </blockquote>
+          </div>
+        </div>
+
+      </text>
+    </div>
+
+    <!-- 
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="CV링크" target="_blank" class="btn">
+        CV
+      </a>
+      <a href="https://github.com/skl0726" target="_blank" class="btn">
+        GitHub
+      </a>
+      <a href="https://linkedin.com/in/sekwang-lee" target="_blank" class="btn">
+        LinkedIn
+      </a>
+      <a href="https://scholar.google.com/citations?user=7ODonxoAAAAJ&hl=ko" target="_blank" class="btn">
+        Google Scholar
+      </a>
+    </div>
+    -->
+    
+  </div>
+
+
+  <!-- News  -->
+  <div>
+    <div class="text-3xl w-full font-bold mb-5 mt-10">📌 News</div>
+  </div>
+  <ul class="list-disc mx-6 mb-10 grid gap-2 text-lg">
+    <li><strong>[Dec 2025]</strong> Won the <b>Best Research Project Award (Grand Prize)</b> from POSTECH CSE</li>
+    <li><strong>[Jun 2025]</strong> Honored to be selected for the <b>Presidential Science Scholarship</b>🏅</li>
+  </ul>
+  
+
+
+
+
+  <!--<div>
+    <div class="text-3xl w-full font-bold mb-5">Latest publications & projects</div>
+  </div>-->
+  <!--<HorizontalCard
+    title="Demo Project 1"
+    img="/post_img.webp"
+    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    url="#"
+    badge="NEW"
+  />-->
+  <!--<div class="divider my-0"></div>-->
+  <!--<HorizontalCard
+    title="Demo Project 2"
+    img="/post_img.webp"
+    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    url="#"
+  />-->
+  <!--<div class="divider my-0"></div>-->
+  <!--<HorizontalCard
+    title="Demo Project 3"
+    img="/post_img.webp"
+    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    url="#"
+    badge="FOSS"
+  />-->
+
+
+  <!--<div>
+    <div class="text-3xl w-full font-bold mb-5 mt-10">Latest from blog</div>
+  </div>-->
+  <!--{
+    last_posts.map((post) => (
+      <>
+        <HorizontalCard
+          title={post.data.title}
+          img={post.data.heroImage}
+          desc={post.data.description}
+          url={"/blog/" + createSlug(post.data.title, post.slug)}
+          target="_self"
+          badge={post.data.badge}
+        />
+        <div class="divider my-0" />
+      </>
+    ))
+  }-->
+</BaseLayout>
