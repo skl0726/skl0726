@@ -22,6 +22,32 @@ const {
   <head>
     <BaseHead title={title} description={description} image={image} , ogType={ogType} />
     {TRANSITION_API && <ViewTransitions />}
+
+    <!-- ★ 완벽한 테마 및 버튼 딜레이 제거 스크립트 ★ -->
+    <script is:inline>
+      // 1. 테마와 버튼 상태를 동시에 세팅하는 함수
+      function applyThemeToDocument(doc) {
+        const theme = localStorage.getItem("theme") || "pastel";
+        // HTML 전체 테마 세팅
+        doc.documentElement.setAttribute("data-theme", theme);
+        
+        // 화면에 보여지기 전의 버튼(스위치)들을 찾아서 미리 상태를 바꿔둠
+        const toggles = doc.querySelectorAll('.theme-toggle');
+        toggles.forEach(toggle => {
+          toggle.checked = theme === "dracula";
+        });
+      }
+      
+      // 2. 사이트에 처음 들어왔을 때 (최초 새로고침)
+      applyThemeToDocument(document);
+      
+      // 3. 다른 페이지로 넘어갈 때 (Astro View Transitions)
+      // astro:before-swap은 새 페이지의 HTML(e.newDocument)이 화면에 그려지기 '직전'입니다.
+      // 이 순간에 새 HTML 문서의 스위치 버튼을 미리 조작해버립니다.
+      document.addEventListener('astro:before-swap', (e) => {
+        applyThemeToDocument(e.newDocument);
+      });
+    </script>
   </head>
   <body>
     <div class="bg-base-100 drawer lg:drawer-open">
@@ -37,5 +63,35 @@ const {
       </div>
       {includeSidebar && <SideBar sideBarActiveItemID={sideBarActiveItemID} />}
     </div>
+
+    <script is:inline>
+      document.addEventListener('astro:page-load', () => {
+        const currentTheme = localStorage.getItem("theme") || "pastel";
+        const toggles = document.querySelectorAll('.theme-toggle');
+
+        toggles.forEach(toggle => {
+          // 현재 테마에 맞게 스위치 상태 세팅
+          toggle.checked = currentTheme === "dracula";
+
+          toggle.onchange = (e) => {
+            const newTheme = e.target.checked ? "dracula" : "pastel";
+            localStorage.setItem("theme", newTheme);
+
+            // ★ CSS 버그 없이 완벽하게 부드러운 화면 전환을 일으키는 핵심 코드 ★
+            if (document.startViewTransition) {
+              document.startViewTransition(() => {
+                document.documentElement.setAttribute("data-theme", newTheme);
+              });
+            } else {
+              // 구형 브라우저 호환용
+              document.documentElement.setAttribute("data-theme", newTheme);
+            }
+
+            // PC와 모바일 버튼 동기화
+            toggles.forEach(t => t.checked = e.target.checked);
+          };
+        });
+      });
+    </script>
   </body>
 </html>
