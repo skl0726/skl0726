@@ -11,6 +11,12 @@ const posts = (await getCollection("blog")).sort((a, b) => b.data.pubDate.valueO
 const last_posts = posts.slice(0, 3);
 ---
 
+<style>
+  html {
+    scrollbar-gutter: stable;
+  }
+</style>
+
 <BaseLayout sideBarActiveItemID="home">
   <div class="pb-0 mt-5">
     <div class="text-xl py-1 font-semibold">Hi there | 안녕하세요 👋 </div>
@@ -46,61 +52,104 @@ const last_posts = posts.slice(0, 3);
             </ul>
           </div>
 
-          <!-- life goal -->
-          <div class="space-y-5">
-            <div>
-              <p class="text-lg text-base-content leading-relaxed">
-                <b>My life goal is to live with moral integrity, stand courageously against injustice, and continuously give back to society.</b>
-                In my journey as an engineer, I will inevitably face critical crossroads.
-                Even at the cost of personal loss or hardship, I will overcome fear and make the right choices.
-              </p>
-              
-              <hr class="border-base-400 my-1.5" />
-              
-              <p class="text-[0.85rem] text-base-content/70 leading-relaxed">
-                <b>도덕적으로 올바른 삶을 살고, 불의에 맞서 용기를 내어 당당히 행동하며, 꾸준히 사회에 환원하고자 하는 인생 목표를 가지고 있습니다.</b>
-                공학자의 삶을 살다 보면 중요한 선택의 기로에 놓일 때가 반드시 올 것입니다.
-                손해를 보고 피해를 입더라도, 두려움을 극복하고 옳은 선택을 하는 사람이 되겠습니다.
-              </p>
 
-              <a href="/blog/scientific-uncertainty" class="mt-2 flex items-center justify-between p-2 rounded-lg bg-base-200 hover:bg-base-300 transition-colors duration-200 border border-base-300 w-full sm:w-max">
-                <span class="text-sm font-semibold text-base-content">✍️ In-depth thoughts (KOR)</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          <!-- Accordion 영역 (순수 CSS 방식) -->
+          <div class="relative border border-base-300 bg-base-100 rounded-xl shadow-sm overflow-hidden">
+            
+            <!-- 핵심: 보이지 않는 체크박스를 버튼처럼 사용합니다 -->
+            <input type="checkbox" id="philosophy-accordion" class="peer absolute top-0 inset-x-0 w-full h-16 opacity-0 z-10 cursor-pointer" />
+            
+            <!-- ✨ 변경점 1: 직접적인 형제 요소(컨테이너)에 peer-checked:[&_.arrow-icon]:rotate-180 추가 -->
+            <div class="flex items-center justify-between p-4 md:p-5 bg-base-400 peer-hover:bg-base-200 transition-colors duration-200 peer-checked:[&_.arrow-icon]:rotate-180">
+              <div class="flex items-center gap-3">
+                <div class="p-2 bg-secondary/10 text-secondary rounded-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a3.75 3.75 0 00-3 0M14.25 18v-.192c0-.983.658-1.82 1.508-2.316a7.5 7.5 0 10-7.516 0c.85.496 1.508 1.333 1.508 2.316V18" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-base-content">Values</h3>
+                  <p class="text-sm text-base-content/60 mt-0.5">Life goal, vision, and personal motto</p>
+                </div>
+              </div>
+              
+              <!-- ✨ 변경점 2: 기존의 peer-checked:rotate-180을 제거하고, arrow-icon 이라는 식별용 클래스 추가 -->
+              <div class="arrow-icon text-base-content/50 transition-transform duration-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
-              </a>
+              </div>
             </div>
 
-            <div>
-              <p class="text-lg text-base-content leading-relaxed">
-                <b>I aspire to grow into an engineering-based generalist</b>, capable of achieving goals in any environment.
-                I believe that embracing diverse values—including not only professional knowledge in CSE,
-                but also deep reflection on the humanities, leadership, and social issues—can exponentially enhance an engineer's potential.
-                <b>I will not easily give up on any values.</b>
-              </p>
+            <!-- 펼쳐지는 내용 영역 (체크박스가 체크되었을 때만 max-h가 커집니다) -->
+            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[1500px]">
               
-              <hr class="border-base-400 my-1.5" />
-              
-              <p class="text-[0.85rem] text-base-content/70 leading-relaxed">
-                어떤 환경에서도 목표를 실현할 수 있는, <b>공학 기반 제너럴리스트로 성장하고 싶습니다.</b>
-                컴퓨터공학에 대한 전문 지식 이외에도 인문학, 리더십, 사회 문제에 대한 깊이 있는 성찰을 비롯한 다양한 가치를 함양한다면, 공학자의 잠재력은 기하급수적으로 커질 것이라고 믿습니다.
-                <b>어떠한 가치도 쉽게 포기하지 않겠습니다.</b>
-              </p>
+              <!-- 내부 패딩 (이 박스가 있어야 닫힐 때 내용물이 찌그러지지 않고 부드럽게 닫힙니다) -->
+              <div class="p-5 md:p-6 border-t border-base-300 text-base-content/90 space-y-8">
+                
+                <!-- life goal -->
+                <div class="space-y-6">
+                  <div>
+                    <p class="text-lg leading-relaxed">
+                      <b>My life goal is to live with moral integrity, stand courageously against injustice, and continuously give back to society.</b>
+                      In my journey as an engineer, I will inevitably face critical crossroads.
+                      Even at the cost of personal loss or hardship, I will overcome fear and make the right choices.
+                    </p>
+                    
+                    <hr class="border-base-300 my-3" />
+                    
+                    <p class="text-[0.9rem] text-base-content/60 leading-relaxed border-base-300">
+                      <b>도덕적으로 올바른 삶을 살고, 불의에 맞서 용기를 내어 당당히 행동하며, 꾸준히 사회에 환원하고자 하는 인생 목표를 가지고 있습니다.</b>
+                      공학자의 삶을 살다 보면 중요한 선택의 기로에 놓일 때가 반드시 올 것입니다.
+                      손해를 보고 피해를 입더라도, 두려움을 극복하고 옳은 선택을 하는 사람이 되겠습니다.
+                    </p>
+
+                    <div class="mt-1 relative z-20"> <!-- z-index를 올려서 링크 클릭이 되게 합니다 -->
+                      <a href="/blog/scientific-uncertainty" class="group inline-flex items-center gap-2 text-sm font-extrabold text-secondary transition-all duration-300">
+                        <span class="relative">
+                          ✍️ In-depth thoughts (KOR)
+                          <span class="absolute left-0 -bottom-1 w-0 h-[2px] bg-secondary transition-all duration-300 group-hover:w-full"></span>
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p class="text-lg leading-relaxed">
+                      <b>I aspire to grow into an engineering-based generalist</b>, capable of achieving goals in any environment.
+                      I believe that embracing diverse values—including not only professional knowledge in CSE,
+                      but also deep reflection on the humanities, leadership, and social issues—can exponentially enhance an engineer's potential.
+                      <b>I will not easily give up on any values.</b>
+                    </p>
+                    
+                    <hr class="border-base-300 my-3" />
+                    
+                    <p class="text-[0.9rem] text-base-content/60 leading-relaxed border-base-300">
+                      어떤 환경에서도 목표를 실현할 수 있는, <b>공학 기반 제너럴리스트로 성장하고 싶습니다.</b>
+                      컴퓨터공학에 대한 전문 지식 이외에도 인문학, 리더십, 사회 문제에 대한 깊이 있는 성찰을 비롯한 다양한 가치를 함양한다면, 공학자의 잠재력은 기하급수적으로 커질 것이라고 믿습니다.
+                      <b>어떠한 가치도 쉽게 포기하지 않겠습니다.</b>
+                    </p>
+                  </div>
+                </div>
+
+                <!-- personal motto -->
+                <div class="bg-base-200 p-4 md:p-5 rounded-xl">
+                  <p class="mb-3 text-bg font-extrabold text-secondary">Personal Motto</p>
+                  <blockquote class="italic text-lg border-l-4 border-secondary pl-3 text-base-content">
+                    <b>"Everything can be taken from a man but one thing: the last of the human freedoms—to choose one’s
+                    attitude in any given set of circumstances, to choose one’s own way."</b>
+                    <footer class="mt-3 text-base not-italic font-medium text-base-content/60">
+                      - Viktor E. Frankl, <cite>Man's Search for Meaning</cite>
+                    </footer>
+                  </blockquote>
+                </div>
+                
+              </div>
             </div>
           </div>
-
-          <!-- personal motto -->
-          <div>
-            <p class="mb-2">This is my personal motto:</p>
-            <blockquote class="italic border-l-4 pl-4">
-              <b>
-                "Everything can be taken from a man but one thing: the last of the human freedoms—to choose one’s
-                attitude in any given set of circumstances, to choose one’s own way."
-              </b>
-              <div class="mt-2 not-italic">- Viktor E. Frankl, <i>Man's Search for Meaning</i></div>
-            </blockquote>
-          </div>
-        </div>
       </text>
     </div>
 
@@ -126,7 +175,7 @@ const last_posts = posts.slice(0, 3);
 
   <!-- News  -->
   <div>
-    <div class="text-3xl w-full font-bold mb-5 mt-10">📌 News</div>
+    <div class="text-3xl w-full font-bold mb-5 mt-6">📌 News</div>
   </div>
   <ul class="list-disc mx-6 mb-10 grid gap-2 text-lg">
     <li>
